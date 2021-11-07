@@ -283,7 +283,10 @@ class MacrosPlugin(BasePlugin):
                                  "too early. Does not exist yet !")
 
 
-
+    ## define custom tag handler
+    def join(loader, node):
+        seq = loader.construct_sequence(node)
+        return ''.join([str(i) for i in seq])
 
     # ----------------------------------
     # load elements
@@ -300,6 +303,8 @@ class MacrosPlugin(BasePlugin):
                 filename = el
             # Paths are be relative to the project root.
             filename = os.path.join(self.project_dir, filename)
+            ## register the tag handler
+            yaml.add_constructor('!join', join)
             if os.path.isfile(filename):
                 with open(filename) as f:
                     # load the yaml file
