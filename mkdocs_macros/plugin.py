@@ -305,7 +305,7 @@ class MacrosPlugin(BasePlugin):
                 with open(filename) as f:
                     # load the yaml file
                     # NOTE: for the SafeLoader argument, see: https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
-                    content = yaml.load(f, Loader=yaml.SafeLoader)
+                    content = yaml.load(f, Loader=yaml.Loader)
                     trace("Loading yaml file:", filename)
                 if key is not None:
                     content = {key: content}
