@@ -282,17 +282,15 @@ class MacrosPlugin(BasePlugin):
             raise AttributeError("You called post_build_functions property "
                                  "too early. Does not exist yet !")
 
-
-    ## define custom tag handler
-    def join(loader, node):
-        seq = loader.construct_sequence(node)
-        return ''.join([str(i) for i in seq])
-
     # ----------------------------------
     # load elements
     # ----------------------------------
 
     def _load_yaml(self):
+        def join(loader, node):
+            seq = loader.construct_sequence(node)
+        return ''.join([str(i) for i in seq])
+        yaml.add_constructor('!join', join)
         "Load the the external yaml files"
         for el in self.config['include_yaml']:
             # el is either a filename or {key: filename} single-entry dict
@@ -303,8 +301,6 @@ class MacrosPlugin(BasePlugin):
                 filename = el
             # Paths are be relative to the project root.
             filename = os.path.join(self.project_dir, filename)
-            ## register the tag handler
-            yaml.add_constructor('!join', join)
             if os.path.isfile(filename):
                 with open(filename) as f:
                     # load the yaml file
